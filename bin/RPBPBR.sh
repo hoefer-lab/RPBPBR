@@ -52,12 +52,16 @@ if (( $# == 4 )); then
   KEEPTMP=1 
 fi
 
-DIR=`dirname $0`
-PATH=$DIR/..:$PATH
+FILE=`readlink -f $0`
+BIN=`dirname $FILE`
+DATA=$BIN/../data/
+PATH=$BIN:$PATH
 
 exe_file bowtie2 
 exe_file bowtie2-build 
 exe_file samtools  
+exe_file adapter_check_trim.pl
+exe_file parse_seg_map.pl
 
 ### bowtie2 analysis
 mkdir ${OUTPRE}
@@ -69,18 +73,22 @@ else
   awk '{if(NR%4==1){sub("@",">",$1); print } if(NR%4==2){print }}' ../$INFILE > ${OUTPRE}.145_remain.fa
 fi
 
+echo "STEP 1: adapter trimming..."
+
 for i in 140 135 130 125 120 115 110 105 100 95 90 85 80 75 70 65 60 55 50 45 40 35 30; do
 
   j=`expr $i + 5`
-  bowtie2-build ${OUTPRE}.${j}_remain.fa ${OUTPRE}.${j}_remain
+  bowtie2-build -q ${OUTPRE}.${j}_remain.fa ${OUTPRE}.${j}_remain
 
-  bowtie2 -f --very-sensitive --score-min L,-1.6,-1.6 --mp 5 --rdg 4,2 --rfg 4,2 -a -p 4 -x ${OUTPRE}.${j}_remain -U /home/xiwang/PacBio/DKFZ/data/adapters_${i}.fa | samtools view -Sb - > ${OUTPRE}_adapter_${i}.bam
+  bowtie2 -f --very-sensitive --score-min L,-1.6,-1.6 --mp 5 --rdg 4,2 --rfg 4,2 -a -p 4 -x ${OUTPRE}.${j}_remain -U $DATA/adapters_${i}.fa 2>/dev/null | samtools view -Sb - > ${OUTPRE}_adapter_${i}.bam 2>/dev/null
   samtools view ${OUTPRE}_adapter_${i}.bam | adapter_check_trim.pl ${OUTPRE}.${j}_remain.fa /dev/stdin ${OUTPRE}_adapter_${i}_clean.fa ${OUTPRE}.${i}_remain.fa > ${OUTPRE}_adapter_${i}.adapter_check_trim.info
 done
-  
+
+echo "STEP 2: segment mapping..."
+
 cat ${OUTPRE}_adapter_*_clean.fa > ${OUTPRE}_clean.fa
-bowtie2-build ${OUTPRE}_clean.fa ${OUTPRE}_clean
-bowtie2 -f --very-sensitive --score-min L,-1.6,-1.6 --mp 5 --rdg 4,2 --rfg 4,2 -a -p 4 -x ${OUTPRE}_clean -U /home/xiwang/PacBio/DKFZ/data/segements.fa | samtools view -Sb - > ${OUTPRE}_clean.segements.bam
+bowtie2-build -q ${OUTPRE}_clean.fa ${OUTPRE}_clean
+bowtie2 -f --very-sensitive --score-min L,-1.6,-1.6 --mp 5 --rdg 4,2 --rfg 4,2 -a -p 4 -x ${OUTPRE}_clean -U $DATA/segements.fa 2>/dev/null | samtools view -Sb - > ${OUTPRE}_clean.segements.bam 2>/dev/null
 samtools view -h ${OUTPRE}_clean.segements.bam | parse_seg_map.pl /dev/stdin ${OUTPRE}.seg_assemble.txt
 grep '>' ${OUTPRE}.145_remain.fa | wc -l > ${OUTPRE}.stat
 grep '>' ${OUTPRE}_clean.fa | wc -l >> ${OUTPRE}.stat
@@ -91,3 +99,5 @@ if (( $KEEPTMP == 0 )); then
   cd ..
   rm -fr $OUTPRE
 fi
+
+echo "DONE."
