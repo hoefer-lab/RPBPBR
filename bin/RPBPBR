@@ -64,7 +64,7 @@ exe_file samtools
 exe_file adapter_check_trim.pl
 exe_file parse_seg_map.pl
 
-### bowtie2 analysis
+### analysis in temp dir
 mkdir ${OUTPRE}
 cd ${OUTPRE}
 
@@ -96,6 +96,7 @@ grep '>' ${OUTPRE}_clean.fa | wc -l >> ${OUTPRE}.stat
 cut -f2 ${OUTPRE}.seg_assemble.txt | sort | uniq -c | awk -vOFS='\t' '{print $1,$2}' | sort -k1,1nr >> ${OUTPRE}.stat
 awk -vOFS='\t' '{if(NR==1){print "total",$1} if(NR==2) {print "intact",$1} if(NR>2) {print $2,$1}}' ${OUTPRE}.stat > ../${OUTPRE}.barcode.count.tsv
 
+### rm temp dir by default
 if (( $KEEPTMP == 0 )); then 
   cd ..
   rm -fr $OUTPRE
