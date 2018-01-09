@@ -40,22 +40,28 @@ foreach my $pb (sort keys %pos2seg) {
   my @pos = sort {$a<=>$b} keys %sub; 
   my $out; 
   if($pos[0] < 45) { 
-    $out = "5'-$sub{$pos[0]}"; 
+    #$out = "5'-$sub{$pos[0]}"; 
+    $out = "$sub{$pos[0]}";  #unhyphenated
   } else { 
-    $out = "5'-X-$sub{$pos[0]}";
+    #$out = "5'-X-$sub{$pos[0]}";
+    $out = "X$sub{$pos[0]}"; #unhyphenated
   }
   for(my $i=1; $i<@pos; $i++) {
     my $n = int(($pos[$i] - $pos[$i-1]) / 212 - 0.5);
     for(my $j=0; $j<$n; $j++) { 
-      $out .= "-X"; 
+      #$out .= "-X"; 
+      $out .= "X";  #unhyphenated
     }
-    $out .= "-$sub{$pos[$i]}";
+    #$out .= "-$sub{$pos[$i]}";
+    $out .= "$sub{$pos[$i]}"; #unhyphenated
   }
   my $n = int(($len{$pb} - $pos[-1]) / 212 - 0.5);
   for(my $j=0; $j<$n; $j++) { 
-    $out .= "-X"; 
+    #$out .= "-X"; 
+    $out .= "X";  #unhyphenated
   }
-  $out .= "-3'"; 
+  #$out .= "-3'"; 
+  #unhyphenated
   # check the 3' end
   print OUT $out."\n"; 
 }

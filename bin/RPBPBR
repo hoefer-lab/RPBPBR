@@ -74,7 +74,7 @@ else
   awk '{if(NR%4==1){sub("@",">",$1); print } if(NR%4==2){print }}' ../$INFILE > ${OUTPRE}.145_remain.fa
 fi
 
-echo "STEP 1: adapter trimming..."
+echo "STEP 1: 5'/3' end trimming..."
 
 for i in 140 135 130 125 120 115 110 105 100 95 90 85 80 75 70 65 60 55 50 45 40 35 30; do
 
@@ -90,6 +90,9 @@ echo "STEP 2: segment mapping..."
 cat ${OUTPRE}_adapter_*_clean.fa > ${OUTPRE}_clean.fa
 bowtie2-build -q ${OUTPRE}_clean.fa ${OUTPRE}_clean
 bowtie2 -f --very-sensitive --score-min L,-1.6,-1.6 --mp 5 --rdg 4,2 --rfg 4,2 -a -p $THREAD -x ${OUTPRE}_clean -U $DATA/segements.fa 2>/dev/null | samtools view -Sb - > ${OUTPRE}_clean.segements.bam 2>/dev/null
+
+echo "STEP 3: barcode assembly..."
+
 samtools view -h ${OUTPRE}_clean.segements.bam | parse_seg_map.pl /dev/stdin ${OUTPRE}.seg_assemble.txt
 grep '>' ${OUTPRE}.145_remain.fa | wc -l > ${OUTPRE}.stat
 grep '>' ${OUTPRE}_clean.fa | wc -l >> ${OUTPRE}.stat
