@@ -13,6 +13,6 @@ RPBPBR <input.fasta/fastq> <out.prefix> <type|fasta/fastq> [keep-temp]
 Xi Wang (xi dot wang at dkfz dot de)
 
 ## Citation
-[1] Weike Pei, Thorsten B. Feyerabend, Jens Roessler, Xi Wang, Daniel Postrach, Katrin Busch, Immanuel Rode, Kay Klapproth, Nikolaus Dietlein, Claudia Quedenau, Wei Chen, Sascha Sauer, Stephan Wolf, Thomas Hoefer, and Hans-Reimer Rodewald. (2017) **_Polylox_ barcoding reveals hematopoietic stem cell fates realized in vivo**. *Nature*, 548, 456-460.
+[1] Weike Pei, Thorsten B. Feyerabend, Jens Roessler, Xi Wang, Daniel Postrach, Katrin Busch, Immanuel Rode, Kay Klapproth, Nikolaus Dietlein, Claudia Quedenau, Wei Chen, Sascha Sauer, Stephan Wolf, Thomas Hoefer, and Hans-Reimer Rodewald. (2017) **_Polylox_ barcoding reveals hematopoietic stem cell fates realized in vivo**. *Nature*, **548**, 456-460.
 
 
