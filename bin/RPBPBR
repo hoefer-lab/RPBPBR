@@ -23,6 +23,21 @@ exe_file()
   fi
 }
 
+location() 
+{
+  TF=$@
+  while [ -L "$TF" ] ; do
+    TF=`readlink $TF`
+  done
+  CUR=`pwd`
+  cd `dirname $TF`
+  TF=`basename $TF`
+  DIR=`pwd -P`
+  cd $CUR
+  FULL=$DIR/$TF
+  echo $FULL
+}
+
 if (( $# < 3 )); then
   err "USAGE: $0 <input.fasta/fastq> <out_prefix> <type:fasta/fastq> [keep temp]"
   exit 1;
@@ -52,7 +67,12 @@ if (( $# == 4 )); then
   KEEPTMP=1 
 fi
 
-FILE=`readlink -f $0`
+if [ `uname` = 'Darwin' ]; then
+  FILE=`location $0`
+else
+  FILE=`readlink -f $0`
+fi
+
 BIN=`dirname $FILE`
 DATA=$BIN/../data/
 PATH=$BIN:$PATH
