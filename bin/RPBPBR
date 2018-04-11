@@ -117,7 +117,7 @@ samtools view -F 4 -h ${OUTPRE}_clean.segements.bam | parse_seg_map.pl /dev/stdi
 grep '>' ${OUTPRE}.145_remain.fa | wc -l > ${OUTPRE}.stat
 grep '>' ${OUTPRE}_clean.fa | wc -l >> ${OUTPRE}.stat
 cut -f2 ${OUTPRE}.seg_assemble.txt | sort | uniq -c | awk -v OFS='\t' '{print $1,$2}' | sort -k1,1nr >> ${OUTPRE}.stat
-awk -v OFS='\t' '{if(NR==1){print "total",$1} if(NR==2) {print "intact",$1} if(NR>2) {print $2,$1}}' ${OUTPRE}.stat > ../${OUTPRE}.barcode.count.tsv
+awk -v OFS='\t' '{if(NR==1){print "total",$1} if(NR==2) {print "intact",$1} if(NR>2) {print "'\''"$2"'\''",$1}}' ${OUTPRE}.stat > ../${OUTPRE}.barcode.count.tsv
 
 ### rm temp dir by default
 if (( $KEEPTMP == 0 )); then 
