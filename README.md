@@ -10,9 +10,11 @@ RPBPBR <input.fasta/fastq> <out.prefix> <type|fasta/fastq> [keep-temp]
 
 
 ## Contact
-Xi Wang (xi dot wang at dkfz dot de)
+Xi Wang (xi dot wang at dkfz dot de) OR (xiwang at njmu dot edu dot cn)
 
 ## Citation
 [1] Weike Pei, Thorsten B. Feyerabend, Jens Roessler, Xi Wang, Daniel Postrach, Katrin Busch, Immanuel Rode, Kay Klapproth, Nikolaus Dietlein, Claudia Quedenau, Wei Chen, Sascha Sauer, Stephan Wolf, Thomas Hoefer, and Hans-Reimer Rodewald. (2017) **_Polylox_ barcoding reveals hematopoietic stem cell fates realized in vivo**. *Nature*, **548**, 456-460.
 
+
+[2] Weike Pei*, Xi Wang*, Jens Rössler*, Thorsten B Feyerabend, Thomas Höfer, Hans-Reimer Rodewald. (2019) **Using Cre-recombinase-driven _Polylox_ barcoding for in vivo fate mapping in mice**. *Nat Protoc*, **14**, 1820–1840. doi:10.1038/s41596-019-0163-5
 
